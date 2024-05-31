@@ -1,7 +1,27 @@
-import { Box, Container, Flex, Heading, HStack, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, HStack, Image, SimpleGrid, Text, VStack, Input, Button } from "@chakra-ui/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
+  const [photos, setPhotos] = useState([]);
+  const [uploadingPhoto, setUploadingPhoto] = useState(null);
+
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setUploadingPhoto(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmit = () => {
+    if (uploadingPhoto) {
+      setPhotos([...photos, uploadingPhoto]);
+      setUploadingPhoto(null);
+    }
+  };
+
   return (
     <Container maxW="container.xl" p={0}>
       {/* Navigation Bar */}
@@ -24,21 +44,15 @@ const Index = () => {
             Main Feed
           </Heading>
           <VStack spacing={4} align="stretch">
-            {/* Sample Photo Cards */}
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
-              <Image src="https://via.placeholder.com/300" alt="Photo 1" />
-              <Box p={4}>
-                <Text fontWeight="bold">Photo 1</Text>
-                <Text>Shared by User 1</Text>
+            {photos.map((photo, index) => (
+              <Box key={index} borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
+                <Image src={photo} alt={`Photo ${index + 1}`} />
+                <Box p={4}>
+                  <Text fontWeight="bold">{`Photo ${index + 1}`}</Text>
+                  <Text>Shared by User 1</Text>
+                </Box>
               </Box>
-            </Box>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
-              <Image src="https://via.placeholder.com/300" alt="Photo 2" />
-              <Box p={4}>
-                <Text fontWeight="bold">Photo 2</Text>
-                <Text>Shared by User 2</Text>
-              </Box>
-            </Box>
+            ))}
           </VStack>
         </Box>
 
@@ -48,13 +62,16 @@ const Index = () => {
             Upload
           </Heading>
           <VStack spacing={4} align="stretch">
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
-              <Image src="https://via.placeholder.com/300" alt="Upload Preview" />
-              <Box p={4}>
-                <Text fontWeight="bold">Upload Preview</Text>
+            <Input type="file" accept="image/*" onChange={handlePhotoUpload} />
+            {uploadingPhoto && (
+              <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
+                <Image src={uploadingPhoto} alt="Upload Preview" />
+                <Box p={4}>
+                  <Text fontWeight="bold">Upload Preview</Text>
+                </Box>
               </Box>
-            </Box>
-            {/* Add Upload Form */}
+            )}
+            <Button onClick={handleSubmit}>Submit</Button>
           </VStack>
         </Box>
 
@@ -64,13 +81,14 @@ const Index = () => {
             Profile
           </Heading>
           <VStack spacing={4} align="stretch">
-            {/* User's Photos */}
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
-              <Image src="https://via.placeholder.com/300" alt="User Photo 1" />
-              <Box p={4}>
-                <Text fontWeight="bold">User Photo 1</Text>
+            {photos.map((photo, index) => (
+              <Box key={index} borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
+                <Image src={photo} alt={`User Photo ${index + 1}`} />
+                <Box p={4}>
+                  <Text fontWeight="bold">{`User Photo ${index + 1}`}</Text>
+                </Box>
               </Box>
-            </Box>
+            ))}
           </VStack>
         </Box>
       </SimpleGrid>
