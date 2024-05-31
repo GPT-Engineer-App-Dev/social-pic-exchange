@@ -62,17 +62,16 @@ const Index = () => {
             Upload
           </Heading>
           <VStack spacing={4} align="stretch">
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
-              <Input type="file" accept="image/*" onChange={handlePhotoUpload} />
-              {uploadingPhoto && (
-                <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
-                  <Image src={uploadingPhoto} alt="Upload Preview" />
-                  <Box p={4}>
-                    <Text fontWeight="bold">Upload Preview</Text>
-                  </Box>
+            <Input type="file" accept="image/*" onChange={handlePhotoUpload} />
+            {uploadingPhoto && (
+              <Box borderWidth="1px" borderRadius="lg" overflow="hidden" w="full">
+                <Image src={uploadingPhoto} alt="Upload Preview" />
+                <Box p={4}>
+                  <Text fontWeight="bold">Upload Preview</Text>
                 </Box>
-              )}
-              <Button onClick={handleSubmit}>Submit</Button>
+              </Box>
+            )}
+            <Button onClick={handleSubmit}>Submit</Button>
           </VStack>
         </Box>
 
